@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+</head>
+<body>
+    <h1>Welcome, {{ username }}!</h1>
+    <h2>Role: {{ role }}</h2>
+    <h2>Time Left: <span id="time-left">{{ time_left }}</span> seconds</h2>
+    {% if tasks %}
+        <h2>Your Tasks:</h2>
+        <ul>
+            {% for task in tasks %}
+                <li>{{ task }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You are an imposter. Find and eliminate crewmates!</p>
+    {% endif %}
+    <h2>Game Status:</h2>
+    <p>Players Alive: <span id="alive">{{ players | map(attribute='alive') | select | list | length }}</span></p>
+    <p>Players Dead: <span id="dead">{{ players | length - (players | map(attribute='alive') | select | list | length) }}</span></p>
+
+    <!-- Logout Option -->
+    <form action="{{ url_for('logout') }}" method="POST">
+        <button type="submit">Logout</button>
+    </form>
+
+    <script>
+        setInterval(() => {
+            fetch('/game_status')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('alive').textContent = data.alive;
+                    document.getElementById('dead').textContent = data.dead;
+                });
+        }, 5000);
+    </script>
+</body>
+</html>
