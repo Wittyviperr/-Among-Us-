@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #444;
+            border-radius: 12px;
+            background: #1e1e1e;
+        }
+        h1, h2 {
+            color: #ff4500;
+            text-shadow: 2px 2px #000;
+        }
+        form {
+            margin: 20px 0;
+        }
+        button {
+            background-color: #00e1ff;
+            color: #121212;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #55f0ff;
+        }
+        select, input {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: #333;
+            color: #fff;
+        }
+        .logout {
+            color: #fff;
+            text-decoration: none;
+            margin-top: 20px;
+            display: inline-block;
+            background: #444;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        .logout:hover {
+            background: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+
+        <h2>Game Status</h2>
+        <p>Game Started: {{ "Yes" if game_state['game_started'] else "No" }}</p>
+        <p>Game Paused: {{ "Yes" if game_state['paused'] else "No" }}</p>
+        <p>Remaining Time: {{ game_state['remaining_time'] | round }} seconds</p>
+        <p>Voting In Progress: {{ "Yes" if game_state['voting_in_progress'] else "No" }}</p>
+        <p>Players Alive: {{ players | selectattr('alive', 'eq', True) | list | length }}</p>
+
+        <!-- Start Game -->
+        {% if not game_state['game_started'] %}
+            <form method="POST" action="/start_game">
+                <button type="submit">Start Game</button>
+            </form>
+        {% endif %}
+
+        <!-- Resume Game -->
+        {% if game_state['paused'] and not game_state['voting_in_progress'] %}
+            <form method="POST" action="/resume_timer">
+                <button type="submit">Resume Game</button>
+            </form>
+        {% endif %}
+
+        <!-- Restart Game -->
+        <form method="POST" action="/restart_game">
+            <button type="submit">Restart Game</button>
+        </form>
+
+        <!-- Start Voting -->
+        {% if game_state['paused'] and not game_state['voting_in_progress'] %}
+            <form method="POST" action="/start_voting">
+                <button type="submit">Start Voting</button>
+            </form>
+        {% endif %}
+
+        <!-- Stop Voting -->
+        {% if game_state['voting_in_progress'] %}
+            <form method="POST" action="/stop_voting">
+                <button type="submit">Stop Voting</button>
+            </form>
+        {% endif %}
+
+        <!-- Assign Tasks -->
+        <h2>Assign Tasks</h2>
+        <form method="POST">
+            <label for="username">Select User:</label>
+            <select name="username" required>
+                {% for username, player in players.items() %}
+                    {% if player['alive'] %}
+                        <option value="{{ username }}">{{ username }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+            <h3>Select Tasks:</h3>
+            {% for task in tasks %}
+                <input type="checkbox" name="tasks" value="{{ task }}"> {{ task }}<br>
+            {% endfor %}
+            <button type="submit">Assign Tasks</button>
+        </form>
+
+        <!-- Mark Player as Dead -->
+        <h2>Mark Player as Dead</h2>
+        <form method="POST" action="/mark_dead">
+            <label for="username">Select User:</label>
+            <select name="username" required>
+                {% for username, player in players.items() %}
+                    {% if player['alive'] %}
+                        <option value="{{ username }}">{{ username }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button type="submit">Mark as Dead</button>
+        </form>
+
+        <!-- Broadcast Message -->
+        <h2>Broadcast Message to All Users</h2>
+        <form method="POST" action="/broadcast_message">
+            <select name="message_type" required>
+                <option value="imposter_ejected">Imposter Ejected! Crewmates Win!</option>
+                <option value="time_ends">Game Time Ends! Imposter Wins!</option>
+            </select>
+            <button type="submit">Broadcast</button>
+        </form>
+
+        <!-- Player Details -->
+        <h2>Player Details</h2>
+        <ul>
+            {% for username, player in players.items() %}
+                <li>
+                    <strong>{{ username }}</strong> ({{ player['role'] }}) -
+                    <span>Status: {{ "Alive" if player['alive'] else "Dead" }}</span> -
+                    <span>Tasks: {{ player['tasks'] if player['tasks'] else "None" }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Logout -->
+        <a href="/admin/logout" class="logout">Logout</a>
+    </div>
+</body>
+</html>
