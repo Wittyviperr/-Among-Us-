@@ -1,11 +1,64 @@
 # -Among-Us-
-Website overview 
-So we have to make a website for among us, there will be two section one for imposter and one for crewmates they all will go through login process. Put 20 min timer from the time they login ed their id.
-Now on the crew mates UI their will be all the tasks shown which has to be done and live dashboard that how many crew members are alive and who all are dead. Every crew mate will get 3 task separately so show only their 3 task which are allotted to them. These all things will be pre decided and remain same throughout the game.
-Now on imposter UI there will be same how many alive and dead just remove the task section part.
-There will be 28 task, 14 offline and 14 online, 14 online tasks will be provided by fullstacks and 14 physical tasks will be setup by altreality.
-now in both the UI put emergency meeting calling option, anyone who clicks on that meeting will be called and a pop up in everyone’s interface that go to the meeting room. In meeting room there will be live voting done on paper only manually/you can do on website if you have time. One member will be ejected and if we have done voting on paper you guys will update that on website.
-If ejected member is crew mate then game will resume, and if that is imposter than stop the game and pop-up option on everyone’s screen that imposter was ejected and crew mates win. And imposter do no get ejected in 20 mins pop-up that crewmates wins.
 
+Among Us - Multiplayer Game Dashboard
+Overview
+This project is a web-based Among Us-inspired Multiplayer Game Dashboard where players and an admin interact through a visually appealing and user-friendly interface. The platform is designed to replicate core functionalities of the game, such as assigning tasks, tracking alive and dead players, and handling emergency meetings and voting. It incorporates a dynamic admin panel for complete control over the game.
 
+Features
+Player Dashboard
+Dynamic Role Assignment: Players log in to their dashboards and are assigned roles (Crewmate or Imposter).
 
+Task Management: Each Crewmate is assigned a unique set of tasks by the admin.
+
+Game Status Tracking: Displays the remaining time, alive and dead players, and whether the game is paused.
+
+Emergency Meetings: Players can call an emergency meeting during the game to pause the timer and initiate discussions.
+
+Interactive Broadcasts: Admin messages (e.g., "Imposter Ejected!" or "Crewmates Win!") are shown as pop-ups in a stylish modal.
+
+Logout Functionality: Secure logout option to exit the game.
+
+Admin Dashboard
+Game Control:
+
+Start, pause, resume, or restart the game.
+
+Initiate and stop voting during emergency meetings.
+
+Task Assignment: Admin can assign tasks to any alive player.
+
+Player Management:
+
+Mark players as dead.
+
+Broadcast custom messages (e.g., "Imposter Wins!" or "Crewmates Win!") to all players.
+
+Live Player Details: Displays player statuses (alive/dead), roles, and assigned tasks in real-time.
+
+Design
+Theme: Inspired by the "Among Us" game, featuring a dark, space-themed background with vibrant neon highlights.
+
+Responsive UI: Optimized for desktop and mobile users.
+
+Interactive Elements:
+
+Bootstrap-powered modals for broadcast messages.
+
+Dynamic updates for game stats using JavaScript and Flask.
+
+Tech Stack
+Frontend:
+
+HTML5, CSS3
+
+JavaScript (Bootstrap Framework for UI)
+
+Backend:
+
+Flask (Python-based web framework)
+
+Jinja2 (Template engine for dynamic content)
+
+Deployment:
+
+Compatible with platforms like Heroku, AWS, or any Flask-compatible environment.
